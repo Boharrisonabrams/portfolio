@@ -1,0 +1,12 @@
+title: Bo Abrams
+description: "Case studies and methods: how I build with coding agents and keep the approvals."
+theme: jekyll-theme-minimal
+plugins:
+  - jekyll-relative-links
+  - jekyll-optional-front-matter
+  - jekyll-readme-index
+relative_links:
+  enabled: true
+  collections: true
+exclude:
+  - images/README.md

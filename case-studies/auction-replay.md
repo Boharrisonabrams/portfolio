@@ -34,8 +34,7 @@ The full run covers all 95 of my eligible nominations across nine price and perf
 
 No supported buy went above either baseline price ceiling, static or inflation-adjusted. For the $49 receiver, the neutral scenario supports bids through $23 and leaves a $50 bid unresolved. The README's third paragraph says the same: "better bidding remains unproven." An offline HTML explorer shows each branch's roster and bounds.
 
-![TODO: room replay showing buy and pass roster bounds for one nomination, 1280x800, pseudonymized team labels, no personal data](../images/auction-replay-bounds.png)
-
+<!-- screenshot pending (batch 4): ![TODO: room replay showing buy and pass roster bounds for one nomination, 1280x800, pseudonymized team labels, no personal data](../images/auction-replay-bounds.png) -->
 ## What failed and what I learned
 
 The premium-bidding edge I set out to find is unproven. The bounds are too loose near realistic prices. The 2025 season also shaped the model, so I need a held-out season before claiming an edge.
@@ -45,6 +44,14 @@ Review caught a bug. The positional calculation missed a FLEX quota when the can
 The compound step, where lessons get written down, never happened, and `AGENTS.md` pointed new sessions at a lessons folder that was never created. The draft-day worksheet and its review receipt were left uncommitted. The headline numbers depend on a private data cache, so a clone runs the tests but can't reproduce them.
 
 The search code has a note to add tighter per-node bounds only if measured unresolved rates require them. At 58.09% unresolved, I think they do, so that's next.
+
+## Code to read first
+
+If you have five minutes, read these three files in order.
+
+- [src/auction_replay/replay_auction.py](https://github.com/Boharrisonabrams/auction-replay/blob/main/src/auction_replay/replay_auction.py): the replay model that freezes draft-time inputs and compares buy and pass roster bounds.
+- [tests/test_replay_auction.py](https://github.com/Boharrisonabrams/auction-replay/blob/main/tests/test_replay_auction.py): the brute-force oracle and the no-leakage hash check, the two tests that matter most.
+- [docs/plans/2026-09-05-1630-feat-league-specific-auction-replay-plan.md](https://github.com/Boharrisonabrams/auction-replay/blob/main/docs/plans/2026-09-05-1630-feat-league-specific-auction-replay-plan.md): the plan that records the buy-versus-pass roster comparison as my call, plus ten numbered technical decisions.
 
 ## Links
 

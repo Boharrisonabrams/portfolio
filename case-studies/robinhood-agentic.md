@@ -26,17 +26,23 @@ The loop also caught two problems that would have fooled me. Variable 1's raw me
 
 Variable 5 failed all four frozen gates without ai-hedge-fund ever running. A contamination rule counts any backtest that overlaps the model's training window as zero evidence. The power math put an honest forward test at about 25 to 69 years, against a two-year limit.
 
-![TODO: STATUS.md verdict table cropped to the five verdict rows, 1280x500, no account lines](../images/robinhood-verdicts.png)
-
+<!-- screenshot pending (batch 4): ![TODO: STATUS.md verdict table cropped to the five verdict rows, 1280x500, no account lines](../images/robinhood-verdicts.png) -->
 ## What failed and what's still open
 
 The repo's git history proves gate-before-data for one verdict out of five. On 2026-06-24 I reset the history to drop 4.3 GB of committed data files, and the new history starts after the verdicts for variables 1 to 4. For those four, the order rests on what the docs say. For variable 5, git shows the frozen gate committed at 19:23 and the verdict at 20:26 that evening. I'd rather say that than imply all five carry equal weight.
 
-![TODO: git log --oneline showing the variable 5 pre-registration and verdict commits, 1280x400, no personal data](../images/robinhood-v5-git-log.png)
-
+<!-- screenshot pending (batch 4): ![TODO: git log --oneline showing the variable 5 pre-registration and verdict commits, 1280x400, no personal data](../images/robinhood-v5-git-log.png) -->
 The freeze is also weaker than the Gate C spec says. The spec claims the engine refuses modified parameters. No such check exists, so a docstring and my discipline enforce it. The cost model is copy-pasted into four engines.
 
 The broker grew the tool surface from 22 to 49, including option order tools, with no change on my side. A live re-enumeration caught it, and STATUS.md still lists the Gate A re-review as open. Read access was never fenced, so the agent can read all my accounts. I accepted that in writing, but it's a real gap.
+
+## Code to read first
+
+Source is private. On a walkthrough I start with these three pieces.
+
+- The Gate A security verification: the tool enumeration and the preview call the broker refused on my main account.
+- The gate evaluators, kept apart from the strategy code: kill thresholds frozen and committed before the agent sees any results.
+- The variable 5 pre-registration and report: the one verdict whose git history proves gate-before-data, plus the claims audit.
 
 ## Links
 

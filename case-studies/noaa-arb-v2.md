@@ -24,8 +24,7 @@ The T0 backtest on replayed v1 data passed, with 52 of 169 simulated resting bid
 
 A pre-declared experiment dropped the model-probability floor from 0.50 to 0.02 and went 0 for its first 18. The autopsy, `docs/WHY_PAPER_LIED.md`, found the in-sample hit rate pooled three cohorts, and bands under 1 cent never won in-sample. The snapshot backtest credited fills on quotes that vanished within minutes. In the best cohort, those hit 84.8%, against 44.2% for quotes that stayed.
 
-![TODO: WHY_PAPER_LIED.md cohort table, 1280x800, no hosts or addresses](../images/noaa-arb-v2-cohort-table.png)
-
+<!-- screenshot pending (batch 4): ![TODO: WHY_PAPER_LIED.md cohort table, 1280x800, no hosts or addresses](../images/noaa-arb-v2-cohort-table.png) -->
 After a verified redeploy, the EXP-002 gate found zero candidates in 1,379 scans. A faster websocket feed found none either: the model rated no cheap band at 0.5 or higher. The bot was paused on 2026-06-30.
 
 The edge lab kept the method: a Rust collector over public order books, a fail-closed canary harness, and a paper ladder, each measuring one hypothesis. Its calibration audit found 8 observations at or above 0.5 model probability in clean v2 data, all near-certain locks. Its arbitrage test, pre-registered at 5:55p PT on 2026-07-08, died that evening because most legs never traded.
@@ -35,6 +34,14 @@ The edge lab kept the method: a Rust collector over public order books, a fail-c
 The worst failure was mine. Until 2026-06-17 the bot kept the 0.02 floor and ran a stale container, so EXP-002 hadn't started when I thought it had. From 2026-06-05 it made 90 paper takes: 1 win in 77 resolved, none in the EXP-002 cohort. Reverting the 0.02 experiment was manual, and I'd hit the same stale-container trap on 2026-06-05. A setting that decides an experiment belongs in code next to the risk caps, or gets checked at boot.
 
 The edge lab's pre-registered check for anyone profiting from the arbitrage counted completed pairs and ignored stranded legs. Full-cycle accounting reversed that finding the same evening. The kill stood, because the fillability test had already failed. The paper ladder has one recorded session of about 22 minutes, and the canary never fired.
+
+## Code to read first
+
+Source is private. On a walkthrough I start with these three pieces.
+
+- The frozen risk-cap block in the config, which neither the bot nor an env var can change.
+- The test ladder, where each rung gates the next and paper results never count as promotion evidence.
+- The paper autopsy, which found the backtest credited fills on quotes that vanished within minutes.
 
 ## Links
 

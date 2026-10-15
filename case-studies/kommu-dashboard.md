@@ -29,8 +29,7 @@ I kept the rules that decide what counts as true: null over a guess, fail-closed
 
 The hosted app went live in July 2026 with sign-in roles, Postgres snapshot storage, a refresh-run audit log, CSV export, and a daily cron. On August 4, 2026, the cron ran its first unattended morning refresh and passed with all seven direct adapters enabled.
 
-![TODO: dashboard overview rendered from synthetic data with the stale banner visible, 1280x800, no real kommu numbers or names](../images/kommu-dashboard-synthetic.png)
-
+<!-- screenshot pending (batch 4): ![TODO: dashboard overview rendered from synthetic data with the stale banner visible, 1280x800, no real kommu numbers or names](../images/kommu-dashboard-synthetic.png) -->
 ## What failed and what I learned
 
 In August the agent refresh froze for four days and nothing said so. An earlier session left uncommitted files on main, and the scheduled task stops on a dirty tree, so every morning run aborted. It was the second time that had happened. A safety stop with no alarm is an outage you find by accident. Around then, auto-deploy also died: zero builds for five days while data kept flowing, so the screen looked fine. Now a deploy claim has to cite the deployment list.
@@ -40,6 +39,14 @@ One sentence in `scripts/assemble.mjs` was hardcoded prose with only the date fi
 The git mirror of the snapshot has commits on 71 of the 125 days from June 11 to October 13, 2026, and none from September 10 to 28. A watchdog route exists, but my hosting plan allows two cron slots and both run the refresh. So during a freeze the only signal is the stale banner, and someone has to be looking at it. Fixes for a refresh hang and a deadline race sit on unmerged branches, and no app code has reached main since August 10, 2026.
 
 Most of `verify-policies.mjs` (about 1,100 `includes(` calls) pins source text instead of testing behavior. Nothing grades whether the agent's insights are any good. The checks cover shape and wording only.
+
+## Code to read first
+
+Source is private. On a walkthrough I start with these three pieces.
+
+- The refresh runbook: the scheduled agent writes a real number or `null`, and a failed source's gap is written down.
+- The snapshot validator: rejects a missing or future timestamp, an age over 36 hours, and period labels that don't match.
+- The promote route: fails closed, so a missing source proof or a failed validation gets an HTTP 422 and nothing goes live.
 
 ## Links
 

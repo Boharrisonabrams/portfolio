@@ -14,8 +14,7 @@ The API is the only writer. On every click, `POST /game/navigate` gets the curre
 
 Finishing a race writes the session, the streak, and the stats. The Postgres function `complete_game_session_v2` does all of it in one transaction under an advisory lock, and a retry returns the stored result instead of counting twice. The daily resets at the player's local midnight and allows one official attempt. It feeds two leaderboards: shortest path and fastest active time.
 
-![TODO: web race screen, 1280x800, no personal data](../images/wikirace-web-race.png)
-
+<!-- screenshot pending (batch 4): ![TODO: web race screen, 1280x800, no personal data](../images/wikirace-web-race.png) -->
 ## What the agents did and what I kept
 
 The game has no AI inside it. I'm the only human committer. Claude Opus planned and reviewed, and Codex implemented. Under `AGENTS.md`, Codex rules on each review finding as ACCEPT, REJECT, or ADJUST and logs each cycle in `docs/ai/state.md`. Of the 200 commits, 186 landed in July 2026.
@@ -24,12 +23,11 @@ I kept the product calls and the releases. The daily-ritual spec lists ten produ
 
 ## Result
 
-The API and web app ran on Railway, and the iOS build went through TestFlight internal testing. GitHub shows 24 merged pull requests. Tests span 18 API files, 38 mobile files, 15 web unit files, 5 Playwright specs, and 4 pgTAP database suites. The last logged runs passed 137 API and 299 mobile tests.
+The API and web app run on Railway. Play it at [wikirace.day](https://wikirace.day). The iOS build went through TestFlight internal testing. That build has since expired, and an App Store release is the next step. GitHub shows 24 merged pull requests. Tests span 18 API files, 38 mobile files, 15 web unit files, 5 Playwright specs, and 4 pgTAP database suites. The last logged runs passed 137 API and 299 mobile tests.
 
 One pgTAP suite is the proof I trust most. `atomic_completion_effects.sql` runs 28 assertions. It forces a stats write to fail, then checks that the completion rolls back and that the retry applies official effects exactly once.
 
-![TODO: iOS search palette, iPhone portrait, no personal data](../images/wikirace-ios-search.png)
-
+<!-- screenshot pending (batch 4): ![TODO: iOS search palette, iPhone portrait, no personal data](../images/wikirace-ios-search.png) -->
 ## What failed and what I learned
 
 CI covers less than the test count suggests. GitHub Actions runs the mobile, API, and shared-lib tests plus a web typecheck and build. The web unit tests, Playwright, and pgTAP never run there. `game-complete-concurrency.test.ts` mocks Supabase and never runs a real race, so the real atomicity proof is the one CI skips.
@@ -40,6 +38,15 @@ The two clients share code by copy. The mobile and web `src/lib` folders share 1
 
 It's still a friend beta that never went wide, and the last commit is from July 28, 2026. The next fixes are pgTAP and web tests in CI and one shared client package.
 
+## Code to read first
+
+If you have five minutes, read these three files in order.
+
+- [artifacts/api-server/src/lib/game/validate-move.ts](https://github.com/Boharrisonabrams/wikirace-public/blob/main/artifacts/api-server/src/lib/game/validate-move.ts): the pure function, with no I/O, that accepts a move only if the source article links to it.
+- [supabase/migrations/20260710160000_atomic_completion_effects.sql](https://github.com/Boharrisonabrams/wikirace-public/blob/main/supabase/migrations/20260710160000_atomic_completion_effects.sql): `complete_game_session_v2` writes the session, streak, and stats in one transaction under an advisory lock.
+- [supabase/tests/atomic_completion_effects.sql](https://github.com/Boharrisonabrams/wikirace-public/blob/main/supabase/tests/atomic_completion_effects.sql): the pgTAP suite that forces a stats write to fail and checks that the retry applies effects exactly once.
+
 ## Links
 
+- Live: [wikirace.day](https://wikirace.day)
 - Code: [wikirace-public on GitHub](https://github.com/Boharrisonabrams/wikirace-public)
