@@ -41,15 +41,28 @@ The premium-bidding edge I set out to find is unproven. The bounds are too loose
 
 Review caught a bug. The positional calculation missed a FLEX quota when the candidate pool lacked one eligible position. (FLEX is a starting slot that a running back, receiver, or tight end can fill.) After the fix, a full league rerun reproduced all 942 recommendation records exactly.
 
-The compound step, where lessons get written down, never happened, and `AGENTS.md` pointed new sessions at a lessons folder that was never created. The draft-day worksheet and its review receipt were left uncommitted. The headline numbers depend on a private data cache, so a clone runs the tests but can't reproduce them.
+The compound step, where lessons get written down, never happened, and `AGENTS.md` pointed new sessions at a lessons folder that was never created. The draft-day worksheet and its review receipt sat uncommitted in the source folder until the public export. The headline numbers depend on a private data cache, so a clone runs the tests but can't reproduce them.
 
 The search code has a note to add tighter per-node bounds only if measured unresolved rates require them. At 58.09% unresolved, I think they do, so that's next.
+
+## What changed since the audit
+
+I audited this repo on October 13, 2026. Over the next week, agents under my review made three changes, and I merged each pull request.
+
+| | October 13 | October 19 |
+| --- | --- | --- |
+| Checks | No linter, formatter, or CI | Ruff, mypy, and a CI matrix on Python 3.11 to 3.13 |
+| Quickstart | Needed private data | `sh scripts/quickstart.sh` replays a synthetic four-team auction from a clean clone |
+| Engine | One module, 1,567 lines before formatting and 2,291 after, that other modules imported private helpers from | Seven modules in reading order with a README code map; 65 of 72 definitions moved with identical text |
+| Tests | 12 | 22, including a pinned contract for the old import path and a quickstart run |
+
+The headline numbers above still come from private data and still cannot be reproduced from a clone. That has not changed.
 
 ## Code to read first
 
 If you have five minutes, read these three files in order.
 
-- [src/auction_replay/replay_auction.py](https://github.com/Boharrisonabrams/auction-replay/blob/main/src/auction_replay/replay_auction.py): the replay model that freezes draft-time inputs and compares buy and pass roster bounds.
+- [src/auction_replay/search.py](https://github.com/Boharrisonabrams/auction-replay/blob/main/src/auction_replay/search.py): the buy-versus-pass comparison, with the roster bounds for every budget and `compare_nominee`, which decides whether a buy is supported.
 - [tests/test_replay_auction.py](https://github.com/Boharrisonabrams/auction-replay/blob/main/tests/test_replay_auction.py): the brute-force oracle and the no-leakage hash check, the two tests that matter most.
 - [docs/plans/2026-09-05-1630-feat-league-specific-auction-replay-plan.md](https://github.com/Boharrisonabrams/auction-replay/blob/main/docs/plans/2026-09-05-1630-feat-league-specific-auction-replay-plan.md): the plan that records the buy-versus-pass roster comparison as my call, plus ten numbered technical decisions.
 
