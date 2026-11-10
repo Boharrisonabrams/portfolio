@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% seo %}
+    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+    <link rel="icon" href="{{ "/favicon.png" | relative_url }}" type="image/png" sizes="32x32">
+    <link rel="icon" href="{{ "/favicon.svg" | relative_url }}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{{ "/apple-touch-icon.png" | relative_url }}">
+  </head>
+  <body{% if page.url == "/" %} class="home"{% endif %}>
+    <div class="wrapper">
+      <header>
+        {% if page.url == "/" %}
+        <h1 class="site-title"><a href="{{ "/" | relative_url }}">{{ site.title }}</a></h1>
+        {% else %}
+        <p class="site-title"><a href="{{ "/" | relative_url }}">{{ site.title }}</a></p>
+        {% endif %}
+
+        <p class="tagline">{{ site.description }}</p>
+
+        <nav aria-label="Site">
+          <a href="{{ "/" | relative_url }}">Case studies</a>
+          <a href="{{ "/methods/how-i-work-with-agents.html" | relative_url }}">How I work with agents</a>
+          <a href="https://github.com/Boharrisonabrams">GitHub</a>
+          <a href="https://www.linkedin.com/in/bo-abrams">LinkedIn</a>
+        </nav>
+      </header>
+      <section>
+        {% unless page.url == "/" %}
+        <p class="back"><a href="{{ "/" | relative_url }}">&larr; All case studies</a></p>
+        {% endunless %}
+
+      {{ content }}
+
+      </section>
+      <footer>
+        <p><small>Built with Jekyll on GitHub Pages. <a href="https://github.com/Boharrisonabrams/portfolio">Source on GitHub</a>.</small></p>
+      </footer>
+    </div>
+  </body>
+</html>
