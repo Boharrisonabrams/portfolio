@@ -8,5 +8,11 @@ plugins:
 relative_links:
   enabled: true
   collections: true
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /images/social-preview.png
 exclude:
   - images/README.md
+  - images/src

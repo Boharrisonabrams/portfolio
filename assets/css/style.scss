@@ -1,0 +1,56 @@
+---
+---
+
+@import "jekyll-theme-minimal";
+
+// Site-specific rules on top of the minimal theme.
+
+// The site title in the sidebar. It is an h1 on the home page and a p
+// elsewhere, so every page has one h1.
+.site-title {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 20px;
+}
+
+// README.md starts with "# Bo Abrams" for the GitHub repo view. On the
+// site, the sidebar already shows that title.
+body.home section > h1:first-child {
+  display: none;
+}
+
+header nav {
+  margin: 0 0 20px;
+}
+
+header nav a {
+  display: block;
+  margin: 0 0 6px;
+}
+
+.back {
+  font-size: 13px;
+}
+
+// The theme makes links bold on hover, which moves the text around them.
+a:hover, a:focus {
+  font-weight: inherit;
+  text-decoration: underline;
+}
+
+@media print, screen and (max-width: 960px) {
+  // The theme keeps this space for download buttons the site does not use.
+  header {
+    padding-right: 0;
+  }
+
+  header nav a {
+    display: inline-block;
+    margin: 0 16px 6px 0;
+  }
+
+  body:not(.home) .tagline {
+    display: none;
+  }
+}
